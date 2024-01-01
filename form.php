@@ -34,12 +34,13 @@ function generateCSV($value) {
             $randomNames = $names[array_rand($names)];
             $randomSurnames = $surnames[array_rand($surnames)];
             $initials = strtoupper($randomNames[0]);
-            $age = rand(1, 90);
-            //Fix tomorrow this is the problem
-            $dateofBirth = date('Y-m-d', strtotime("-{$age} years"));
-            echo(strtotime("-{$age} years"));
-            //echo ($dateofBirth);
 
+            $age = rand(1, 90);
+            $randomMonth = rand(1, 12); 
+            $randomDay = rand(1, 28);   
+
+            $dateofBirth = date('Y-m-d', strtotime("-{$age} years -{$randomMonth} months -{$randomDay} days"));
+      
             $isDuplicate = false;
 
         //Check for duplicates
@@ -48,7 +49,7 @@ function generateCSV($value) {
             $randomNames = $names[array_rand($names)];
             $randomSurnames = $surnames[array_rand($surnames)];
             $age = rand(1, 90);
-            $dateofBirth = date('Y-m-d', strtotime("-{$age} years"));
+            $dateofBirth = date('Y-m-d', strtotime("-{$age} years -{$randomMonth} months -{$randomDay} days"));
             //if there is no duplicate continue generating new entries
             $isDuplicate = false;
             foreach ($arrData as $entry) {
