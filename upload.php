@@ -5,7 +5,7 @@ try {
     $pdo = new PDO('sqlite:C:\Users\27837\test2.db');
     echo 'Connection was successful';
 
-    $tableName = 'csv_import2';
+    $tableName = 'csv_import3';
 
     // Set the PDO attribute to throw exceptions on errors
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
