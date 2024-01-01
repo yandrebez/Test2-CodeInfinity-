@@ -1,4 +1,9 @@
 <?php
+ini_set('upload_max_filesize', '-1');
+ini_set('post_max_size', '-1');
+ini_set('max_execution_time', 300);
+ini_set('memory_limit', '-1');
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 try {
@@ -37,6 +42,7 @@ try {
     if (isset($_FILES['csvFile']) && $_FILES['csvFile']['error'] == UPLOAD_ERR_OK) {
         $csvFilePath = $_FILES['csvFile']['tmp_name'];
 
+        $chunkSize = 5000;
         // Load CSV data
         $csvData = array_map('str_getcsv', file($csvFilePath));
 
