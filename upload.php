@@ -50,12 +50,12 @@ try {
             $stmt->execute($row);
         }
 
-        echo 'Data inserted successfully';
+        echo "Data inserted successfully.";
     } else {
         echo 'No file uploaded or an error occurred.';
     }
 } catch (PDOException $e) {
-    echo 'Connection failed: ' . $e->getMessage();
+    echo 'Connection failed:\n ' . $e->getMessage();
 }
 ?>
 
