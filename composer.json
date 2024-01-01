@@ -1,0 +1,10 @@
+{
+    "name": "vendor/test2",
+    "description": "This task is to test your skills in manipulating arrays and file handling.",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {
+        "ext-sqlite3": "*"
+    }
+}
