@@ -2,13 +2,13 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 try {
-    $pdo = new PDO('sqlite:C:\Users\27837\test2.db');
+    $db = new PDO('sqlite:C:\Users\27837\test2.db');
     echo 'Connection was successful';
 
-    $tableName = 'csv_import3';
+    $tableName = 'csv_import';
 
     // Set the PDO attribute to throw exceptions on errors
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Define SQL statement to create the table
     $createTableSQL = "
@@ -23,8 +23,15 @@ try {
     ";
 
     // Execute the SQL statement to create the table
-    $pdo->exec($createTableSQL);
+    $db->exec($createTableSQL);
     echo 'Table created successfully';
+
+    //Clear database on new csv upload
+    $clearTable = [$tableName];
+
+    foreach($clearTable as $clearTable){
+        $db ->exec("DELETE FROM $clearTable");
+    }
 
     // Check if a file was uploaded
     if (isset($_FILES['csvFile']) && $_FILES['csvFile']['error'] == UPLOAD_ERR_OK) {
@@ -43,7 +50,7 @@ try {
         ";
 
         // Prepare the SQL statement
-        $stmt = $pdo->prepare($insertDataSQL);
+        $stmt = $db->prepare($insertDataSQL);
 
         // Iterate through CSV data and insert into the table
         foreach ($csvData as $row) {

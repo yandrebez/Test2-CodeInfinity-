@@ -23,6 +23,8 @@ function generateCSV($value) {
         }
     }
 
+    $id=0;
+
     
     //Created an array that the data that is randomly generated will be returned to.
     $arrData = [];
@@ -39,12 +41,15 @@ function generateCSV($value) {
             $randomDay = rand(1, 28);   
 
             $dateofBirth = date('Y-m-d', strtotime("-{$age} years -{$randomMonth} months -{$randomDay} days"));
+
+            $id = (int) $id;
       
             $isDuplicate = false;
 
         //Check for duplicates
         //If duplicate, keep generating new entries until a unique one is found
-        while ($isDuplicate) {
+        if($isDuplicate) {
+            //echo($isDuplicate);
             $randomNames = $arrNames[array_rand($arrNames)];
             $randomSurnames = $arrSurnames[array_rand($arrSurnames)];
             $age = rand(1, 90);
@@ -59,6 +64,7 @@ function generateCSV($value) {
                     $entry['dateOfBirth'] === $dateofBirth
                 ) {
                     $isDuplicate = true;
+                    //echo($isDuplicate);
                     break;
                 }
             }
@@ -70,10 +76,11 @@ function generateCSV($value) {
 
     //Print the values in the array into .csv
     $file = fopen($existingFile, 'w');
-    if (empty($existingData)) {
-        // Write the header only if the file is empty.
-        fputcsv($file, ['Id', 'Name', 'Surname', 'Initials', 'Age', 'DateOfBirth']);
-    }
+    fputcsv($file, ['Id', 'Name', 'Surname', 'Initials', 'Age', 'DateOfBirth']);
+    // if (empty($existingData)) {
+    //     // Write the header only if the file is empty.
+    //     fputcsv($file, ['Id', 'Name', 'Surname', 'Initials', 'Age', 'DateOfBirth']);
+    // }
     foreach ($arrData as $row) {
         fputcsv($file, $row);
     }
