@@ -10,7 +10,7 @@ try {
     // Check for POST method
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dataBase = new PDO('sqlite:C:\Users\27837\test2.db');
-        echo 'Connection was successful';
+        echo "Connection was successful<br>";
 
         $tableName = 'csv_import';
 
@@ -31,7 +31,7 @@ try {
 
         // Execute the SQL statement to create the table
         $dataBase->exec($createTableSQL);
-        echo 'Table created successfully';
+        echo "Table created successfully<br>";
 
         //Making sure db is clear for upload of csv
         $clearTable = [$tableName];
@@ -78,7 +78,7 @@ try {
             // Commit the transaction
             $dataBase->commit();
 
-            echo "Data inserted successfully.";
+            echo 'Data inserted successfully.<br><a href="record.php">Check Record count</a>"';
         } else {
             echo 'File upload error';
             var_dump($_FILES);

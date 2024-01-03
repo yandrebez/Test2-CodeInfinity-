@@ -1,11 +1,11 @@
 <?php
 
-if (!file_exists('output')) {
-    mkdir('output');
-    echo "file created";
-} else {
-    echo 'file exists. <a href="upload.html">Upload document</a>"';
-}
+// if (!file_exists('output')) {
+//     mkdir('output');
+//     echo "file created";
+// } else {
+//     echo 'file exists. <a href="upload.html">Upload document</a>"';
+// }
 
 function generateCSV($value) {
     //1. Created two arrays one for Names and another for Surnames each with 20 values.
@@ -15,9 +15,11 @@ function generateCSV($value) {
     // Load the last used ID from the existing CSV file.
     $id = 0;
     $existingData = [];
+    //2. Csv File path 
     $existingFile = 'output/output.csv';
     if (file_exists($existingFile)) {
         $existingData = array_map('str_getcsv', file($existingFile));
+        echo 'file exists. <a href="upload.html">Upload document</a>"';
         if (!empty($existingData)) {
             $id = end($existingData)[0];
         }
@@ -29,7 +31,7 @@ function generateCSV($value) {
     //Created an array that the data that is randomly generated will be returned to.
     $arrData = [];
 
-    //2. Method to generate random records that will be returned to $arrData
+    //3. Method to generate random records that will be returned to $arrData
     for($i = 0; $i < $value; $i++){
             $id++;
             $randomNames = $arrNames[array_rand($arrNames)];
@@ -40,50 +42,43 @@ function generateCSV($value) {
             $randomMonth = rand(1, 12); 
             $randomDay = rand(1, 28);   
 
-            $dateofBirth = date('Y-m-d', strtotime("-{$age} years -{$randomMonth} months -{$randomDay} days"));
+            $dateofBirth = date('d/m/Y', strtotime("-{$randomDay} days -{$randomMonth} months -{$age} years"));
 
             $id = (int) $id;
       
-            $isDuplicate = false;
+            $isDuplicate = true;
+            $uniqueCheck = [];
 
-        //Check for duplicates
-        //If duplicate, keep generating new entries until a unique one is found
-        if($isDuplicate) {
-            //echo($isDuplicate);
+        while ($isDuplicate) {
             $randomNames = $arrNames[array_rand($arrNames)];
             $randomSurnames = $arrSurnames[array_rand($arrSurnames)];
             $age = rand(1, 90);
-            $dateofBirth = date('Y-m-d', strtotime("-{$age} years -{$randomMonth} months -{$randomDay} days"));
-            //if there is no duplicate continue generating new entries
-            $isDuplicate = false;
-            foreach ($arrData as $entry) {
-                if (
-                    $entry['name'] === $randomNames &&
-                    $entry['surname'] === $randomSurnames &&
-                    $entry['age'] === $age &&
-                    $entry['dateOfBirth'] === $dateofBirth
-                ) {
-                    $isDuplicate = true;
-                    //echo($isDuplicate);
-                    break;
-                }
+            $randomMonth = rand(1, 12); 
+            $randomDay = rand(1, 28); 
+            $dateofBirth = date('d/m/Y', strtotime("-{$randomDay} days -{$randomMonth} months -{$age} years"));
+            
+            $key = $randomNames . $randomSurnames . $age . $dateofBirth;
+
+            if (!isset($uniqueCheck[$key])) {
+                $uniqueCheck[$key] = true;
+                $arrData[] = ['id' => $id, 'name' => $randomNames, 'surname' => $randomSurnames, 'initials' => $initials, 'age' => $age, 'dateOfBirth' => $dateofBirth];
+                break;
+            } else {
+                echo "Duplicate found. Re-generating...\n";
             }
         }
-        //return the random generated values != duplicate to $arrData
-        $arrData[] = ['id' => $id, 'name' => $randomNames, 'surname' => $randomSurnames, 'initials' => $initials, 'age' => $age, 'dateOfBirth' => $dateofBirth];
     }
     //print_r($arrData);
-
-    //Print the values in the array into .csv
-    $file = fopen($existingFile, 'w');
-    fputcsv($file, ['Id', 'Name', 'Surname', 'Initials', 'Age', 'DateOfBirth']);
-    // if (empty($existingData)) {
-    //     // Write the header only if the file is empty.
-    //     fputcsv($file, ['Id', 'Name', 'Surname', 'Initials', 'Age', 'DateOfBirth']);
-    // }
+    $csvString = '';
     foreach ($arrData as $row) {
-        fputcsv($file, $row);
+        $csvString .= '"' . implode('","', $row) . "\"\n";
     }
+
+    //echo $csvString;
+
+    // Save the CSV string to a file
+    $file = fopen($existingFile, 'w');
+    fwrite($file, $csvString);
     fclose($file);
 }
 
