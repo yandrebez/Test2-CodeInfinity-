@@ -27,7 +27,6 @@ function generateCSV($value) {
 
     $id=0;
 
-    
     //Created an array that the data that is randomly generated will be returned to.
     $arrData = [];
 
